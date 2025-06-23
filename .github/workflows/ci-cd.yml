@@ -16,7 +16,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+
       - name: Run linting
         run: npm run lint
         working-directory: ./frontend
