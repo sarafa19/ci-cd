@@ -19,9 +19,11 @@ jobs:
       
       - name: Run linting
         run: npm run lint
+        working-directory: ./frontend
         
       - name: npm audit
         run: npm audit
+        working-directory: ./frontend
       
       - name: Snyk security scan
         uses: snyk/actions/node@master
@@ -32,6 +34,7 @@ jobs:
       
       - name: Run tests
         run: npm test
+        working-directory: ./frontend
         
       - name: Build Docker images
         run: docker-compose build
