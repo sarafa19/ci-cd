@@ -69,7 +69,7 @@ jobs:
       - name: Build and push
         run: |
           docker compose build
-          docker tag project_frontend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:frontend
-          docker tag project_backend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:backend
+          docker tag ci-cd-frontend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:frontend
+          docker tag ci-ci-backend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:backend
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:frontend
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:backend
