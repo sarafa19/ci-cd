@@ -1,0 +1,58 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [dev]
+  push:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      
+      - name: Run linting
+        run: npm run lint
+        
+      - name: npm audit
+        run: npm audit
+      
+      - name: Snyk security scan
+        uses: snyk/actions/node@master
+        with:
+          command: monitor
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      
+      - name: Run tests
+        run: npm test
+        
+      - name: Build Docker images
+        run: docker-compose build
+
+  deploy-prod:
+    needs: test-and-build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      
+      - name: Build and push
+        run: |
+          docker-compose build
+          docker tag project_frontend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:frontend
+          docker tag project_backend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:backend
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:frontend
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:backend
