@@ -17,11 +17,11 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm install
         working-directory: ./frontend
 
-      - name: Install dependencies (backend)
+      - name: Install backend dependencies
         run: npm install
         working-directory: ./backend
 
