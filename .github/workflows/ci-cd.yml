@@ -52,13 +52,6 @@ jobs:
       - name: Run tests
         run: npm test -- --passWithNoTests
         working-directory: ./frontend
-        
-      - name: Install docker-compose
-        run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-      - name: Build Docker images
-        run: docker-compose build
 
   deploy-prod:
     needs: test-and-build
@@ -75,7 +68,7 @@ jobs:
       
       - name: Build and push
         run: |
-          docker-compose build
+          docker compose build
           docker tag project_frontend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:frontend
           docker tag project_backend ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:backend
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myrepo:frontend
