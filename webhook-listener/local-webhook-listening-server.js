@@ -8,8 +8,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const repoDir = '/path/to/your/target/directory'; // this is where the code will pll your directory code locally just to use the docker-compose.yml file
-const repoUrl = 'https://github.com/user/repo.git';// this is the url of the repo you want to pull the code from
+// Ajoutez ce middleware en haut, après app.use(cors())
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request at ${req.path}`);
+  next();
+});
+
+// Ajoutez une route test
+app.get('/', (req, res) => {
+  res.send('Webhook listener is running');
+});
+
+const repoDir = '/ci-cd'; // this is where the code will pll your directory code locally just to use the docker-compose.yml file
+const repoUrl = 'https://github.com/sarafa19/ci-cd.git';// this is the url of the repo you want to pull the code from
 
 const repoName = path.basename(repoUrl, '.git');
 const fullPath = path.join(repoDir, repoName);
@@ -56,6 +67,6 @@ app.post('/webhook', (req, res) => {
   }
 });
 
-app.listen(8000, () => {
-  console.log('Server listening on port 8000');
+app.listen(8001, () => {
+  console.log('Server listening on port 8001');
 });
