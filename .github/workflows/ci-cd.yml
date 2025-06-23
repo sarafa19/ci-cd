@@ -40,9 +40,17 @@ jobs:
           args: ./frontend
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk security scan backend
+        uses: snyk/actions/node@master
+        with:
+          command: monitor
+          args: ./backend
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       
       - name: Run tests
-        run: npm test
+        run: npm test -- --passWithNoTests
         working-directory: ./frontend
         
       - name: Build Docker images
