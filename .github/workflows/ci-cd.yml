@@ -30,18 +30,18 @@ jobs:
         working-directory: ./frontend
       
       - name: Snyk security scan frontend
-        working-directory: ./frontend
         uses: snyk/actions/node@master
         with:
           command: monitor
+          args: ./frontend
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk security scan backend
-        working-directory: ./backend
         uses: snyk/actions/node@master
         with:
           command: monitor
+          args: ./backend
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       
